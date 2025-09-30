@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <title>Santorini Blue | Book a Room</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="author" content="Peiretti Sofia; Ruiz Lola" />
+    <meta name="description"
+        content="Reserve su habitación en Santorini Blue: vista al mar, piscina y atención personalizada." />
+    <meta name="keywords" content="santorini, hotel, reserva, booking, habitaciones" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="imagenes/favicon.png" type="image/x-icon" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@600&display=swap"
+        rel="stylesheet">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+    <header class="header">
+        <nav aria-label="Primaria">
+            <ul class="nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="booking.html" aria-current="page">Book a room</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="imagen-book">
+        <img src="imagenes/imagenbook.png" alt="Vista del resort Santorini Blue">
+    </section>
+    <section class="contenedor">
+        <h2 class="book-titulo">BOOK A ROOM</h2>
+        <form class="book-form" action="#" novalidate>
+            <div class="campo">
+                <label for="checkin">Check-in and check-out</label>
+                <div class="rango-fecha">
+                    <input type="date" id="checkin" name="checkin" required>
+                    <span class="dash">—</span>
+                    <input type="date" id="checkout" name="checkout" required>
+                </div>
+            </div>
+            <div class="campo">
+                <label for="guests">Room and guests</label>
+                <select id="guests" name="guests">
+                    <option value="1">1 room · 1 guest</option>
+                    <option value="2">1 room · 2 guests</option>
+                    <option value="3-4">1 room · 3-5 guests</option>
+                </select>
+            </div>
+            <div class="search">
+                <button type="submit" class="btn-buscar">Search</button>
+            </div>
+        </form>
+    </section>
+    <section class="rooms">
+        <h2 class="sr-titulo">Select room</h2>
+        <div class="rooms-layout">
+            <div class="rooms-list">
+                <article class="room-card">
+                    <img class="room-img" src="imagenes/standardRoom.png" alt="Standard Room">
+                    <div class="room-body">
+                        <header class="room-head">
+                            <h3 class="room-name">Standard Room</h3>
+                            <div class="room-price">$200.00</div> <!-- despues agregar lo de tipo precio -->
+                        </header>
+                        <ul class="room-meta">
+                            <li>👤 1 adult max</li>
+                            <li>⛋ 30 m²</li>
+                        </ul>
+                        <a href="#" class="room-link">More details</a>
+
+                        <div class="room-cant">
+                            <span class="qty-label">Add rooms</span>
+                            <div class="counter nojs">
+                                <button type="button" disabled>−</button>
+                                <input type="number" name="std_qty" min="0" max="9" value="0" inputmode="numeric">
+                                <button type="button" disabled>＋</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="room-card">
+                    <img class="room-img" src="imagenes/superiorRoom.png" alt="Superior Room">
+                    <div class="room-body">
+                        <header class="room-head">
+                            <h3 class="room-name">Superior Room</h3>
+                            <div class="room-price">$300.00</div> <!-- despues agregar lo de tipo precio -->
+                        </header>
+
+                        <ul class="room-meta">
+                            <li>👥 2 adults max</li>
+                            <li>⛋ 30 m²</li>
+                        </ul>
+
+                        <a href="#" class="room-link">More details</a>
+
+                        <div class="room-cant">
+                            <span class="qty-label">Add rooms</span>
+                            <div class="counter nojs">
+                                <button type="button" disabled>−</button>
+                                <input type="number" name="sup_qty" min="0" max="9" value="0" inputmode="numeric">
+                                <button type="button" disabled>＋</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <article class="room-card">
+                    <img class="room-img" src="imagenes/familySuite.png" alt="Family Suite">
+                    <div class="room-body">
+                        <header class="room-head">
+                            <h3 class="room-name">Family Suite</h3>
+                            <div class="room-price">$400.00</div> <!-- despues agregar lo de tipo precio -->
+                        </header>
+
+                        <ul class="room-meta">
+                            <li>👥 2 adults max</li>
+                            <li>⛋ 30 m²</li>
+                        </ul>
+                        <a href="#" class="room-link">More details</a> <!-- despues agregar popup -->
+
+                        <div class="room-cant">
+                            <span class="qty-label">Add rooms</span>
+                            <div class="counter nojs">
+                                <button type="button" disabled>−</button> <!-- no tiene funcionabilidad java -->
+                                <input type="number" name="fam_qty" min="0" max="9" value="0" inputmode="numeric">
+                                <button type="button" disabled>＋</button> <!-- no tiene funcionabilidad java -->
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+
+            <aside class="resumen">
+                <h3 class="resumen-title">Your Reservation</h3>
+                <div class="resumen-line">
+                    <span>Check-In:</span>
+                    <span class="muted">—</span>
+                </div>
+                <div class="resumen-line">
+                    <span>Check-Out:</span>
+                    <span class="muted">—</span>
+                </div>
+
+                <hr class="resumen-sep">
+
+                <p class="resumen-note">1 room, 2 adults, 1 night</p>
+                <p class="resumen-warn">Please add rooms</p>
+
+                <hr class="resumen-sep">
+
+                <div class="resumen-total">
+                    <span>Total</span>
+                    <span>$0.00</span>
+                </div>
+                <button type="button" class="btn-continue">Continue</button>
+            </aside>
+        </div>
+    </section>
+
+</body>
+
+</html>
