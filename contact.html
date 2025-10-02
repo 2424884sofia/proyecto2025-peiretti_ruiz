@@ -54,36 +54,40 @@
         <form class="contact-form" action="#" method="post" novalidate>
             <div class="field">
                 <label for="fname">First name *</label>
-                <input id="fname" name="fname" type="text" placeholder="Write your name" required />
+                <input id="fname" name="fname" type="text" placeholder="Write your name" required size="30"
+                    maxlength="50" />
             </div>
-
             <div class="field">
                 <label for="lname">Last name *</label>
-                <input id="lname" name="lname" type="text" placeholder="Write your last name" required />
+                <input id="lname" name="lname" type="text" placeholder="Write your last name" required size="30"
+                    maxlength="50" />
             </div>
 
             <div class="field">
                 <label for="email">Email *</label>
-                <input id="email" name="email" type="email" placeholder="name@mail.com" required />
+                <input id="email" name="email" type="email" placeholder="name@mail.com" required size="30"
+                    maxlength="60" />
             </div>
 
             <div class="field phone-field">
                 <label for="phone">Phone</label>
                 <div class="phone-input">
-                    <select aria-label="Country code" name="ccode">
+                    <select aria-label="Country code" name="ccode" size="1">
                         <option value="+30">+30</option>
                         <option value="+54">+54</option>
                         <option value="+34">+34</option>
                         <option value="+44">+44</option>
                         <option value="+1">+1</option>
                     </select>
-                    <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="___ ___ ____" />
+                    <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="___ ___ ___" size="15"
+                        maxlength="15" />
                 </div>
             </div>
 
             <div class="field field-full">
                 <label for="message">Type your message here...</label>
-                <textarea id="message" name="message" rows="6"></textarea>
+                <textarea id="message" name="message" rows="6" maxlength="500"
+                    placeholder="Max 500 characters"></textarea>
             </div>
 
             <div class="actions">

@@ -87,7 +87,7 @@ main{ flex: 1 0 auto; } /* por Tag */
 
 
 .fondo{
-  background-image: url("../imagenes/principal.jpg");
+  background-image: url("../Imagenes/principal.jpg");
   background-size: cover;
   background-position: center;
 

@@ -37,7 +37,7 @@
         </nav>
     </header>
     <section class="imagen-acostada">
-        <img src="imagenes/imagenbook.png" alt="Vista del resort Santorini Blue">
+        <img src="Imagenes/imagenbook.png" alt="Vista del resort Santorini Blue">
     </section>
     <section class="container">
         <h2 class="titulo">BOOK A ROOM</h2>
@@ -45,14 +45,14 @@
             <div class="campo">
                 <label for="checkin">Check-in and check-out</label>
                 <div class="rango-fecha">
-                    <input type="date" id="checkin" name="checkin" required>
+                    <input type="date" id="checkin" name="checkin" required size="10" maxlength="10">
                     <span class="dash">—</span>
-                    <input type="date" id="checkout" name="checkout" required>
+                    <input type="date" id="checkout" name="checkout" required size="10" maxlength="10">
                 </div>
             </div>
             <div class="campo">
                 <label for="guests">Room and guests</label>
-                <select id="guests" name="guests">
+                <select id="guests" name="guests" size="1">
                     <option value="1">1 room · 1 guest</option>
                     <option value="2">1 room · 2 guests</option>
                     <option value="3-4">1 room · 3-5 guests</option>
@@ -84,7 +84,8 @@
                             <span class="qty-label">Add rooms</span>
                             <div class="counter nojs">
                                 <button type="button" disabled>−</button>
-                                <input type="number" name="std_qty" min="0" max="9" value="0" inputmode="numeric">
+                                <input type="number" name="std_qty" min="0" max="9" value="0" inputmode="numeric"
+                                    size="2" maxlength="1">
                                 <button type="button" disabled>＋</button>
                             </div>
                         </div>
@@ -110,7 +111,8 @@
                             <span class="qty-label">Add rooms</span>
                             <div class="counter nojs">
                                 <button type="button" disabled>−</button>
-                                <input type="number" name="sup_qty" min="0" max="9" value="0" inputmode="numeric">
+                                <input type="number" name="sup_qty" min="0" max="9" value="0" inputmode="numeric"
+                                    size="2" maxlength="1">
                                 <button type="button" disabled>＋</button>
                             </div>
                         </div>
@@ -134,7 +136,8 @@
                             <span class="qty-label">Add rooms</span>
                             <div class="counter nojs">
                                 <button type="button" disabled>−</button> <!-- no tiene funcionabilidad java -->
-                                <input type="number" name="fam_qty" min="0" max="9" value="0" inputmode="numeric">
+                                <input type="number" name="fam_qty" min="0" max="9" value="0" inputmode="numeric"
+                                    size="2" maxlength="1">
                                 <button type="button" disabled>＋</button> <!-- no tiene funcionabilidad java -->
                             </div>
                         </div>
