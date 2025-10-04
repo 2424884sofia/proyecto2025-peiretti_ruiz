@@ -52,11 +52,13 @@
             </div>
             <div class="campo">
                 <label for="guests">Room and guests</label>
-                <select id="guests" name="guests" size="1">
-                    <option value="1">1 room · 1 guest</option>
-                    <option value="2">1 room · 2 guests</option>
-                    <option value="3-4">1 room · 3-5 guests</option>
+                <select id="guests" name="guests">
+                    <option value="all" selected>Show all rooms</option>
+                    <option value="1">For room · 1 guest</option>
+                    <option value="2">For room · 2 guests</option>
+                    <option value="3-5">For room · 3–5 guests</option>
                 </select>
+
             </div>
             <div class="search">
                 <button type="submit" class="btn-buscar">Search</button>
@@ -78,15 +80,15 @@
                             <li>👤 1 adult max</li>
                             <li>⛋ 30 m²</li>
                         </ul>
-                        <a href="#" class="room-link">More details</a>
+                        <a href="#" class="room-more" data-action="room-details" data-room="std">More details</a>
 
                         <div class="room-cant">
                             <span class="qty-label">Add rooms</span>
                             <div class="counter nojs">
-                                <button type="button" disabled>−</button>
+                                <button type="button" class="qty-btn" data-action="dec" data-target="std_qty">−</button>
                                 <input type="number" name="std_qty" min="0" max="9" value="0" inputmode="numeric"
                                     size="2" maxlength="1">
-                                <button type="button" disabled>＋</button>
+                                <button type="button" class="qty-btn" data-action="inc" data-target="std_qty">+</button>
                             </div>
                         </div>
                     </div>
@@ -102,18 +104,18 @@
 
                         <ul class="room-meta">
                             <li>👥 2 adults max</li>
-                            <li>⛋ 30 m²</li>
+                            <li>⛋ 40 m²</li>
                         </ul>
 
-                        <a href="#" class="room-link">More details</a>
+                        <a href="#" class="room-more" data-action="room-details" data-room="sup">More details</a>
 
                         <div class="room-cant">
                             <span class="qty-label">Add rooms</span>
                             <div class="counter nojs">
-                                <button type="button" disabled>−</button>
+                                <button type="button" class="qty-btn" data-action="dec" data-target="sup_qty">−</button>
                                 <input type="number" name="sup_qty" min="0" max="9" value="0" inputmode="numeric"
                                     size="2" maxlength="1">
-                                <button type="button" disabled>＋</button>
+                                <button type="button" class="qty-btn" data-action="inc" data-target="sup_qty">+</button>
                             </div>
                         </div>
                     </div>
@@ -128,17 +130,17 @@
 
                         <ul class="room-meta">
                             <li>👥 2 adults max</li>
-                            <li>⛋ 30 m²</li>
+                            <li>⛋ 50 m²</li>
                         </ul>
-                        <a href="#" class="room-link">More details</a> <!-- despues agregar popup -->
+                        <a href="#" class="room-more" data-action="room-details" data-room="fam">More details</a>
 
                         <div class="room-cant">
                             <span class="qty-label">Add rooms</span>
                             <div class="counter nojs">
-                                <button type="button" disabled>−</button> <!-- no tiene funcionabilidad java -->
+                                <button type="button" class="qty-btn" data-action="dec" data-target="fam_qty">−</button>
                                 <input type="number" name="fam_qty" min="0" max="9" value="0" inputmode="numeric"
                                     size="2" maxlength="1">
-                                <button type="button" disabled>＋</button> <!-- no tiene funcionabilidad java -->
+                                <button type="button" class="qty-btn" data-action="inc" data-target="fam_qty">+</button>
                             </div>
                         </div>
                     </div>
@@ -160,19 +162,60 @@
                 <hr class="resumen-sep">
 
                 <p class="resumen-note">1 room, 2 adults, 1 night</p>
+                <ul class="resumen-items" id="summary-items"></ul>
                 <p class="resumen-warn">Please add rooms</p>
 
                 <hr class="resumen-sep">
 
                 <div class="resumen-total">
                     <span>Total</span>
-                    <span>$0.00</span>
+                    <span id="summary-total">$0.00</span>
                 </div>
                 <button type="button" class="btn-continue">Continue</button>
             </aside>
         </div>
     </section>
+    <div id="app-modal" class="modal-backdrop" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-msg">
+            <button class="modal-close" type="button" aria-label="Close">×</button>
+            <h3 id="modal-title">Error</h3>
+            <div id="modal-msg">Mensaje…</div>
+            <div class="modal-actions">
+                <button type="button" class="btn-primary" id="modal-ok">OK</button>
+            </div>
+        </div>
+    </div>
 
+    <div id="room-modal" class="room-backdrop" aria-hidden="true">
+        <div class="room-dialog" role="dialog" aria-modal="true" aria-labelledby="room-title">
+            <button class="room-close" type="button" aria-label="Close">×</button>
+
+            <div class="room-media">
+                <div class="room-slider" id="room-slider">
+                    <!-- slides dinámicos, falta agregar img -->
+                    <button class="nav nav-prev" type="button" aria-label="Previous">‹</button>
+                    <button class="nav nav-next" type="button" aria-label="Next">›</button>
+                </div>
+                <div class="room-dots" id="room-dots"></div>
+            </div>
+
+            <div class="room-info">
+                <h2 id="room-title">Room name</h2>
+
+                <div class="room-overview">
+                    <div><span>👤</span><span id="room-capacity">—</span></div>
+                    <div><span>⛋</span><span id="room-size">—</span></div>
+                </div>
+
+                <h3 class="room-subttl">About this room</h3>
+                <p id="room-desc" class="room-desc line-clamp"></p>
+                <h3 class="room-subttl">Amenities</h3>
+                <ul id="room-amenities" class="room-amenities"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js" defer></script>
 </body>
 
 </html>
