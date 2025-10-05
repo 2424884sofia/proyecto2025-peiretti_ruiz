@@ -368,28 +368,29 @@ const initBooking = () => {
   const inEl = document.getElementById("checkin");
   const outEl = document.getElementById("checkout");
 
-  // Reaccionar a cambios para recalcular en vivo
+  // Reaccionar a cambios para recalcular en vivo (fechas)
   ["change", "input"].forEach((ev) => {
     inEl?.addEventListener(ev, () => updateSummary(inEl, outEl));
     outEl?.addEventListener(ev, () => updateSummary(inEl, outEl));
   });
 
-  // Cantidades por tipo
+  // Cantidades por tipo (std/sup/fam)
   document
-    .querySelectorAll(
-      'input[name="std_qty"], input[name="sup_qty"], input[name="fam_qty"]'
-    )
+    .querySelectorAll('input[name="std_qty"], input[name="sup_qty"], input[name="fam_qty"]')
     .forEach((el) => {
       ["change", "input"].forEach((ev) =>
         el.addEventListener(ev, () => updateSummary(inEl, outEl))
       );
     });
 
-  // Envío
+  // Importante: NO filtramos al cambiar el select;
+  // solo al hacer Search dentro de handleSubmit.
+
+  // Envío (Search)
   form.addEventListener("submit", handleSubmit);
 
-  // Primera actualización (por si hay valores pre-cargados)
-  filterRoomsByGuests();
+  // Restaurar si venimos de payment y pintar el resumen inicial
+  restoreFromCheckout();
   updateSummary(inEl, outEl);
 };
 
@@ -398,6 +399,40 @@ document.addEventListener("DOMContentLoaded", initBooking);
 document
   .querySelectorAll('input[name="std_qty"], input[name="sup_qty"], input[name="fam_qty"]')
   .forEach((el) => { el.readOnly = true; });
+
+
+// Restaura booking desde el payload guardado en payment (sb_checkout)
+const restoreFromCheckout = () => {
+  let data;
+  try { data = JSON.parse(localStorage.getItem("sb_checkout") || "null"); }
+  catch { data = null; }
+  if (!data) return;
+
+  // Fechas
+  const inEl  = document.getElementById("checkin");
+  const outEl = document.getElementById("checkout");
+  if (inEl)  inEl.value  = data.checkin || "";
+  if (outEl) outEl.value = data.checkout || "";
+
+  // Cantidades por tipo
+  const map = { std: "std_qty", sup: "sup_qty", fam: "fam_qty" };
+  (data.rooms || []).forEach(r => {
+    const name = map[r.id];
+    const input = document.querySelector(`input[name="${name}"]`);
+    if (input) {
+      input.value = String(r.qty || 0);
+      // disparo para que tu lógica recalcule todo
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+  });
+
+  // Si querés mostrar todas las rooms al volver:
+  const guestsSel = document.getElementById("guests");
+  if (guestsSel) guestsSel.value = "all";
+
+  // Pintar resumen con lo restaurado
+  updateSummary(inEl, outEl);
+};
 
 
 /**
