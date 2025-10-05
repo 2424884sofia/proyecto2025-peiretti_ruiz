@@ -214,55 +214,7 @@
 
         </div>
     </main>
-
-    <script>
-        // === Leer datos del checkout y pintar resumen ===
-        const money = n => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n || 0);
-        const data = (() => { try { return JSON.parse(localStorage.getItem("sb_checkout") || "{}") } catch { return {} } })();
-
-        const sumIn = document.getElementById('sum-in');
-        const sumOut = document.getElementById('sum-out');
-        const sumNights = document.getElementById('sum-nights');
-        const sumRooms = document.getElementById('sum-rooms');
-        const sumTotal = document.getElementById('sum-total');
-
-        if (!data || !data.total || !data.rooms || !data.rooms.length) {
-            // si no hay datos, volver al booking
-            window.location.replace('booking.html');
-        } else {
-            sumIn.textContent = data.checkin;
-            sumOut.textContent = data.checkout;
-            sumNights.textContent = data.nights;
-            sumTotal.textContent = money(data.total);
-
-            // líneas por habitación
-            sumRooms.innerHTML = data.rooms.map(r => `
-        <div class="sum-row">
-          <span>${r.qty} ${r.name}${r.qty > 1 ? 's' : ''}</span>
-          <strong>${money(r.qty * r.price * data.nights)}</strong>
-        </div>
-      `).join('');
-        }
-
-        // === Validación simple del pago (demo) ===
-        document.getElementById('pay-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const f = e.target;
-            const required = ['fname', 'lname', 'email', 'card', 'nameoncard', 'exp', 'cvv'];
-            const missing = required.filter(id => !f[id].value.trim());
-            if (missing.length) {
-                alert('Please complete all required fields.');
-                f[missing[0]].focus();
-                return;
-            }
-            // (Aquí iría el procesamiento real del pago)
-            alert('Payment successful! A confirmation email has been sent.');
-            // Limpio el storage del checkout
-            localStorage.removeItem('sb_checkout');
-            // Redirijo a una página de éxito si querés
-            // window.location.href = 'success.html';
-        });
-    </script>
+    <script defer src="js/app.js"></script>
 </body>
 
 </html>

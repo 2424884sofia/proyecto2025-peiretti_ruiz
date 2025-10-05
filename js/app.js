@@ -53,24 +53,38 @@ const calcNights = (checkIn, checkOut) => {
 };
 
 /**
- * Valida rango de fechas. Si es incorrecto, alerta y blanquea el campo problemático.
+ * Valida rango de fechas y que no sean del pasado.
+ * - Check-in >= hoy
+ * - Check-out > Check-in
  * @method validateDates
- * @param {HTMLInputElement} inEl - Input check-in.
- * @param {HTMLInputElement} outEl - Input check-out.
- * @return {boolean} true si es válido; false si no.
+ * @param {HTMLInputElement} inEl
+ * @param {HTMLInputElement} outEl
+ * @return {boolean}
  */
 const validateDates = (inEl, outEl) => {
-  const inDate = parseISODate(inEl.value);
+  const inDate  = parseISODate(inEl.value);
   const outDate = parseISODate(outEl.value);
-
   if (!inDate || !outDate) return false;
 
+  // hoy a las 00:00
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (inDate < today) {
+    showErrorAndClear(inEl, "La fecha de Check-in no puede ser anterior a hoy.");
+    return false;
+  }
+  if (outDate < today) {
+    showErrorAndClear(outEl, "La fecha de Check-out no puede ser anterior a hoy.");
+    return false;
+  }
   if (outDate <= inDate) {
     showErrorAndClear(outEl, "La fecha de Check-out debe ser posterior al Check-in.");
     return false;
   }
   return true;
 };
+
 
 /**
  * Valida un input numérico (0–9) y limpia si es inválido.
@@ -155,7 +169,7 @@ const currentRoomsWithQty = () => {
   if (qSup > 0) parts.push(pluralize(qSup, "Superior Room"));
   if (qFam > 0) parts.push(pluralize(qFam, "Family Room"));
 
-  return parts.length ? parts.join(" + ") : null; // sin fallback al select
+  return parts.length ? parts.join(" + ") : null; 
 };
 
 
@@ -175,15 +189,13 @@ const stepQty = (qtyName, delta) => {
   if (val < min) val = min;
   if (val > max) val = max;
   input.value = String(val);
-  // Disparar actualización
   input.dispatchEvent(new Event("input", { bubbles: true }));
 };
 
-// Delegación: escuchar clicks en cualquier botón – / +
 document.addEventListener("click", (e) => {
   const btn = e.target.closest('[data-action="inc"],[data-action="dec"]');
   if (!btn) return;
-  const name = btn.getAttribute("data-target"); // ej: "std_qty"
+  const name = btn.getAttribute("data-target"); 
   if (!name) return;
   stepQty(name, btn.dataset.action === "inc" ? 1 : -1);
 });
@@ -201,29 +213,24 @@ document.addEventListener("click", (e) => {
 const updateSummary = (inEl, outEl) => {
   const { inSpan, outSpan, totalSpan, warn, note } = getSummaryRefs();
 
-  // Fechas y noches
   const inDate = parseISODate(inEl.value);
   const outDate = parseISODate(outEl.value);
   const nights = calcNights(inDate, outDate);
 
-  // Cantidades por tipo
   const stdQty = validateRoomQty(document.querySelector('input[name="std_qty"]'));
   const supQty = validateRoomQty(document.querySelector('input[name="sup_qty"]'));
   const famQty = validateRoomQty(document.querySelector('input[name="fam_qty"]'));
 
-  // -------- Fechas en el resumen
   if (inSpan)  inSpan.textContent  = inDate ? inEl.value  : "—";
   if (outSpan) outSpan.textContent = outDate ? outEl.value : "—";
 
-  // -------- Lista de líneas con ✖
-  const listEl = document.getElementById("summary-items"); // <ul id="summary-items">
+  const listEl = document.getElementById("summary-items"); 
   if (listEl) {
     const items = [];
     if (stdQty > 0) items.push({ id: "std", text: pluralize(stdQty, "Standard Room") });
     if (supQty > 0) items.push({ id: "sup", text: pluralize(supQty, "Superior Room") });
     if (famQty > 0) items.push({ id: "fam", text: pluralize(famQty, "Family Room") });
 
-    // oculto/limpio el <p> viejo si lo usabas para el texto corrido
     if (note) note.textContent = "";
 
     listEl.innerHTML = items.map(it => `
@@ -232,11 +239,8 @@ const updateSummary = (inEl, outEl) => {
         <button type="button" class="line-remove" data-remove-room="${it.id}" aria-label="Remove">×</button>
       </li>
     `).join("");
-
-    // Warning “Please add rooms”
     if (warn) warn.style.display = items.length > 0 ? "none" : "";
   } else {
-    // Fallback: si no existe el <ul>, mantené tu texto original
     const label = (() => {
       const parts = [];
       if (stdQty > 0) parts.push(pluralize(stdQty, "Standard Room"));
@@ -251,11 +255,9 @@ const updateSummary = (inEl, outEl) => {
     if (warn) warn.style.display = label ? "none" : "";
   }
 
-  // -------- Total
   const total = computeTotal({ std: stdQty, sup: supQty, fam: famQty }, nights);
   if (totalSpan) totalSpan.textContent = formatPrice(total);
 
-  // -------- Delegación para eliminar (se ata una sola vez)
   const bindListRemove = () => {
     const ul = document.getElementById("summary-items");
     if (!ul || ul.dataset.bound) return;
@@ -267,7 +269,7 @@ const updateSummary = (inEl, outEl) => {
       const input = document.querySelector(`input[name="${nameById[id]}"]`);
       if (!input) return;
       input.value = "0";
-      input.dispatchEvent(new Event("input", { bubbles: true })); // dispara este mismo updateSummary
+      input.dispatchEvent(new Event("input", { bubbles: true })); 
     });
     ul.dataset.bound = "1";
   };
@@ -285,7 +287,7 @@ document.querySelector(".resumen")?.addEventListener("click", (e) => {
   if (!input) return;
 
   input.value = "0";
-  input.dispatchEvent(new Event("input", { bubbles: true })); // dispara tu updateSummary
+  input.dispatchEvent(new Event("input", { bubbles: true }));
 });
 
 
@@ -303,8 +305,6 @@ const setVisibilityByQtyName = (qtyName, visible) => {
 
   if (card) card.style.display = visible ? "" : "none";
 
-  // ⚠️ No tocar el valor cuando se oculta; así NO se borra del resumen.
-  // Podés deshabilitarlo para evitar foco/edición mientras está oculto:
   if (input) input.disabled = !visible;
 };
 
@@ -351,7 +351,7 @@ const handleSubmit = (e) => {
   }
   if (!validateDates(inEl, outEl)) return;
 
-  // ✅ solo al presionar Search se filtran las habitaciones
+  // solo al presionar Search se filtran las habitaciones
   filterRoomsByGuests();
   updateSummary(inEl, outEl);
 };
@@ -368,13 +368,11 @@ const initBooking = () => {
   const inEl = document.getElementById("checkin");
   const outEl = document.getElementById("checkout");
 
-  // Reaccionar a cambios para recalcular en vivo (fechas)
   ["change", "input"].forEach((ev) => {
     inEl?.addEventListener(ev, () => updateSummary(inEl, outEl));
     outEl?.addEventListener(ev, () => updateSummary(inEl, outEl));
   });
 
-  // Cantidades por tipo (std/sup/fam)
   document
     .querySelectorAll('input[name="std_qty"], input[name="sup_qty"], input[name="fam_qty"]')
     .forEach((el) => {
@@ -382,100 +380,94 @@ const initBooking = () => {
         el.addEventListener(ev, () => updateSummary(inEl, outEl))
       );
     });
-
-  // Importante: NO filtramos al cambiar el select;
-  // solo al hacer Search dentro de handleSubmit.
-
-  // Envío (Search)
   form.addEventListener("submit", handleSubmit);
 
-  // Restaurar si venimos de payment y pintar el resumen inicial
   restoreFromCheckout();
   updateSummary(inEl, outEl);
 };
-
-// Iniciar cuando el documento esté listo 
+ 
 document.addEventListener("DOMContentLoaded", initBooking);
 document
   .querySelectorAll('input[name="std_qty"], input[name="sup_qty"], input[name="fam_qty"]')
   .forEach((el) => { el.readOnly = true; });
 
-
-// Restaura booking desde el payload guardado en payment (sb_checkout)
 const restoreFromCheckout = () => {
   let data;
   try { data = JSON.parse(localStorage.getItem("sb_checkout") || "null"); }
   catch { data = null; }
   if (!data) return;
 
-  // Fechas
   const inEl  = document.getElementById("checkin");
   const outEl = document.getElementById("checkout");
   if (inEl)  inEl.value  = data.checkin || "";
   if (outEl) outEl.value = data.checkout || "";
 
-  // Cantidades por tipo
   const map = { std: "std_qty", sup: "sup_qty", fam: "fam_qty" };
   (data.rooms || []).forEach(r => {
     const name = map[r.id];
     const input = document.querySelector(`input[name="${name}"]`);
     if (input) {
       input.value = String(r.qty || 0);
-      // disparo para que tu lógica recalcule todo
       input.dispatchEvent(new Event("input", { bubbles: true }));
     }
   });
 
-  // Si querés mostrar todas las rooms al volver:
   const guestsSel = document.getElementById("guests");
   if (guestsSel) guestsSel.value = "all";
 
-  // Pintar resumen con lo restaurado
   updateSummary(inEl, outEl);
 };
 
+/* ========= Modal reutilizable (inyecta si falta) ========= */
+const ensureModal = () => {
+  if (document.getElementById('app-modal')) return;
+  const overlay = document.createElement('div');
+  overlay.id = 'app-modal';
+  overlay.className = 'modal-backdrop';
+  overlay.setAttribute('aria-hidden', 'true');
+  overlay.innerHTML = `
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" aria-label="Close">×</button>
+      <h3 id="modal-title">Error</h3>
+      <div id="modal-msg"></div>
+      <div class="modal-actions">
+        <button id="modal-ok" class="btn-continue" type="button">OK</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
 
-/**
- * Abre el modal con título y mensaje(s).
- * @method showModal
- * @param {string|string[]} message - Texto o array de textos.
- * @param {string} [title="Error"] - Título del modal.
- * @returns {void}
- */
-const showModal = (message, title = "Error") => {
-  const overlay = document.getElementById("app-modal");
-  const titleEl = document.getElementById("modal-title");
-  const msgEl   = document.getElementById("modal-msg");
-  const okBtn   = document.getElementById("modal-ok");
-  if (!overlay || !titleEl || !msgEl || !okBtn) {
-    // Fallback si no existe el HTML del modal
-    alert(Array.isArray(message) ? message.join("\n") : message);
-    return;
-  }
+  // listeners básicos
+  overlay.addEventListener('click', (e) => { if (e.target.id === 'app-modal') hideModal(); });
+  overlay.querySelector('.modal-close').addEventListener('click', hideModal);
+  overlay.querySelector('#modal-ok').addEventListener('click', hideModal);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideModal(); });
+};
+
+const showModal = (message, title = 'Error') => {
+  ensureModal();
+  const overlay = document.getElementById('app-modal');
+  const titleEl = document.getElementById('modal-title');
+  const msgEl   = document.getElementById('modal-msg');
 
   titleEl.textContent = title;
-  if (Array.isArray(message)) {
-    msgEl.innerHTML = `<ul class="modal-list">${message.map(m=>`<li>${m}</li>`).join("")}</ul>`;
-  } else {
-    msgEl.textContent = message;
-  }
+  msgEl.innerHTML = Array.isArray(message)
+    ? `<ul class="modal-list">${message.map(m => `<li>${m}</li>`).join('')}</ul>`
+    : String(message);
 
-  overlay.style.display = "grid";
-  overlay.removeAttribute("aria-hidden");
-  document.body.style.overflow = "hidden";
-  okBtn.focus();
+  overlay.style.display = 'grid';
+  overlay.removeAttribute('aria-hidden');
+  document.body.style.overflow = 'hidden';
 };
 
-/** Cierra el modal y restaura scroll/foco. */
 const hideModal = () => {
-  const overlay = document.getElementById("app-modal");
+  const overlay = document.getElementById('app-modal');
   if (!overlay) return;
-  overlay.style.display = "none";
-  overlay.setAttribute("aria-hidden", "true");
-  document.body.style.overflow = "";
+  overlay.style.display = 'none';
+  overlay.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
 };
 
-// Cierres rápidos
+
 document.getElementById("modal-ok")?.addEventListener("click", hideModal);
 document.querySelector("#app-modal .modal-close")?.addEventListener("click", hideModal);
 document.getElementById("app-modal")?.addEventListener("click", (e) => {
@@ -499,7 +491,6 @@ const showErrorAndClear = (el, message) => {
   showModal(message, "Error");
 };
 
-/** Info estática por tipo de habitación */
 const ROOMS_DB = {
   std: {
     title: "Standard Room",
@@ -551,7 +542,7 @@ const ROOMS_DB = {
   },
 };
 
-/** Abre/cierra modal de detalles */
+/** abre y cierra modal de detalles */
 const openRoomModal = () => {
   const o = document.getElementById("room-modal");
   if (!o) return;
@@ -567,7 +558,7 @@ const closeRoomModal = () => {
   document.body.style.overflow = "";
 };
 
-/** Crea slides con 1+ imágenes */
+/** crea slides con imágenes */
 const buildSlides = (imgs=[]) => {
   const slider = document.getElementById("room-slider");
   const dots   = document.getElementById("room-dots");
@@ -576,7 +567,7 @@ const buildSlides = (imgs=[]) => {
   slider.querySelectorAll(".room-slide").forEach(el=>el.remove());
   dots.innerHTML = "";
 
-  const sources = imgs.length ? imgs : []; // si no hay, quedará vacío (mostrará fondo gris)
+  const sources = imgs.length ? imgs : []; 
 
   sources.forEach((src, i) => {
     const wrap = document.createElement("div");
@@ -590,7 +581,6 @@ const buildSlides = (imgs=[]) => {
     dots.appendChild(dot);
   });
 
-  // Navegación
   let idx = 0;
   const update = (n) => {
     idx = (n + sources.length) % sources.length;
@@ -612,7 +602,7 @@ const buildSlides = (imgs=[]) => {
  * @param {HTMLElement} trigger - Botón/Link clickeado
  */
 const openRoomDetails = (trigger) => {
-  // 1) Identificar tipo
+
   let key = trigger?.dataset?.room;
   if (!key) {
     const title = trigger.closest(".room-card")?.querySelector("h3, .room-title")?.textContent || "";
@@ -622,7 +612,6 @@ const openRoomDetails = (trigger) => {
   }
   const data = ROOMS_DB[key];
 
-  // 2) Texto
   document.getElementById("room-title").textContent    = data.title;
   document.getElementById("room-capacity").textContent = data.capacity;
   document.getElementById("room-size").textContent     = data.size;
@@ -630,27 +619,23 @@ const openRoomDetails = (trigger) => {
   desc.textContent = data.desc;
   desc.classList.add("line-clamp");
 
-  // 3) Amenities
   const ul = document.getElementById("room-amenities");
   ul.innerHTML = data.amenities.map(a=>`<li>${a}</li>`).join("");
 
-  // 4) Fotos: toma la imagen de la card como mínimo
   const cardImg = trigger.closest(".room-card")?.querySelector("img")?.src;
   const imgs = cardImg ? [cardImg] : [];
   buildSlides(imgs);
 
-  // 5) Mostrar
   openRoomModal();
 };
 
-/* Eventos del modal */
+
 document.querySelector("#room-modal .room-close")?.addEventListener("click", closeRoomModal);
 document.getElementById("room-modal")?.addEventListener("click", (e) => {
   if (e.target.id === "room-modal") closeRoomModal(); // click fuera
 });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeRoomModal(); });
 
-/* Delegación global para los botones de More details */
 document.addEventListener("click", (e) => {
   const btn = e.target.closest('[data-action="room-details"]');
   if (!btn) return;
@@ -660,7 +645,6 @@ document.addEventListener("click", (e) => {
 
 
 /* Payment */
-// === Continue → guardar resumen y navegar a payment.html ===
 const getQty = (name) => Number(document.querySelector(`input[name="${name}"]`)?.value || 0);
 
 const buildCheckoutData = () => {
@@ -694,8 +678,21 @@ const buildCheckoutData = () => {
 document.querySelector(".btn-continue")?.addEventListener("click", () => {
   const data = buildCheckoutData();
 
-  if (!data.checkin || !data.checkout) {
+  const inDate  = parseISODate(data.checkin);
+  const outDate = parseISODate(data.checkout);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (!inDate || !outDate) {
     showModal("Completá Check-in y Check-out.", "Error");
+    return;
+  }
+  if (inDate < today) {
+    showModal("La fecha de Check-in no puede ser anterior a hoy.", "Error");
+    return;
+  }
+  if (outDate < today) {
+    showModal("La fecha de Check-out no puede ser anterior a hoy.", "Error");
     return;
   }
   if (data.nights <= 0) {
@@ -710,3 +707,350 @@ document.querySelector(".btn-continue")?.addEventListener("click", () => {
   localStorage.setItem("sb_checkout", JSON.stringify(data));
   window.location.href = "payment.html";
 });
+
+// contact formulario
+
+/**
+ * Inserta/actualiza el mensaje de error bajo el campo y marca estilos.
+ * @method setError
+ * @param {HTMLElement} el - input/textarea a validar
+ * @param {string} msg - mensaje de error ("" para limpiar)
+ */
+const setError = (el, msg) => {
+  // Contenedor .field es el padre directo en tu HTML
+  const field = el.closest('.field') || el.parentElement;
+  let help = field.querySelector('.field-error');
+  if (!help) {
+    help = document.createElement('p');
+    help.className = 'field-error';
+    field.appendChild(help);
+  }
+  help.textContent = msg;
+  el.classList.toggle('input-error', Boolean(msg));
+  el.setAttribute('aria-invalid', Boolean(msg));
+};
+
+/**
+ * Valida nombres/apellidos: requerido, min 2, solo letras y espacios.
+ * @method validateName
+ * @param {string} v
+ * @returns {string}
+ */
+const validateName = (v) => {
+  const s = (v || '').trim();
+  if (!s) return 'Campo obligatorio.';
+  if (s.length < 2) return 'Mínimo 2 caracteres.';
+  if (!/^[\p{L} ]+$/u.test(s)) return 'Usá solo letras y espacios.';
+  return '';
+};
+
+/**
+ * Valida email con patrón razonable.
+ * @method validateEmail
+ * @param {string} v
+ * @returns {string}
+ */
+const validateEmail = (v) => {
+  const s = (v || '').trim();
+  if (!s) return 'Campo obligatorio.';
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!re.test(s)) return 'Ingresá un email válido.';
+  return '';
+};
+
+/**
+ * Teléfono: opcional. Si se completa, 7–12 dígitos (ignora espacios/guiones).
+ * @method validatePhone
+ * @param {string} v
+ * @returns {string}
+ */
+const validatePhone = (v) => {
+  const digits = (v || '').replace(/\D/g, '');
+  if (!digits) return '';
+  if (digits.length < 7 || digits.length > 12) return 'Teléfono inválido (7–12 dígitos).';
+  return '';
+};
+
+/**
+ * Mensaje: opcional en tu HTML, pero validamos longitud si escribe.
+ * Si querés hacerlo obligatorio, descomentá la primer validación.
+ * @method validateMessage
+ * @param {string} v
+ * @returns {string}
+ */
+const validateMessage = (v) => {
+  const s = (v || '').trim();
+  // if (!s) return 'Campo obligatorio.';
+  if (s.length > 500) return 'Máximo 500 caracteres.';
+  return '';
+};
+
+/**
+ * Valida un campo según su id y pinta el error si corresponde.
+ * @method validateField
+ * @param {HTMLElement} el
+ * @returns {boolean} true si pasa
+ */
+const validateField = (el) => {
+  const { id, value } = el;
+  let msg = '';
+  if (id === 'fname' || id === 'lname') msg = validateName(value);
+  else if (id === 'email') msg = validateEmail(value);
+  else if (id === 'phone') msg = validatePhone(value);
+  else if (id === 'message') msg = validateMessage(value);
+  setError(el, msg);
+  return !msg;
+};
+
+/**
+ * Valida el formulario completo.
+ * @method validateContactForm
+ * @returns {boolean}
+ */
+const validateContactForm = () => {
+  const els = [
+    document.getElementById('fname'),
+    document.getElementById('lname'),
+    document.getElementById('email'),
+    document.getElementById('phone'),
+    document.getElementById('message'),
+  ].filter(Boolean);
+
+  const results = els.map(validateField);
+  if (results.includes(false)) {
+    const firstError = els.find(e => e.classList.contains('input-error'));
+    firstError?.focus();
+    return false;
+  }
+  return true;
+};
+
+/* ====== Eventos: feedback en tiempo real + Submit ====== */
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('form.contact-form');
+  if (!form) return;
+
+  const ids = ['fname','lname','email','phone','message'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('blur', () => validateField(el));
+    el.addEventListener('input', () => {
+      // Limpia mientras escribe si había error
+      if (el.classList.contains('input-error')) validateField(el);
+    });
+  });
+
+ form.addEventListener('submit', (e) => {
+  e.preventDefault();                     // nunca recarga ni envía
+  const valido = validateContactForm();   // pinta errores debajo de cada campo
+
+  if (!valido) {
+    showModal('Por favor completá de manera correcta los campos obligatorios.', 'Error');
+    return;
+  }
+
+  showModal('¡Gracias! Tu mensaje fue enviado.', 'Message sent');
+  form.reset();
+  ['fname','lname','email','phone','message'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) setError(el, '');
+  });
+});
+
+});
+
+/* ======================= PAYMENT ======================= */
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('pay-form');
+  if (!form) return; // no estamos en payment.html
+
+  // ---- pintar resumen desde localStorage (igual que tu inline) ----
+  const money = n => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n || 0);
+  const data = (() => { try { return JSON.parse(localStorage.getItem("sb_checkout") || "{}"); } catch { return {}; } })();
+
+  const sumIn = document.getElementById('sum-in');
+  const sumOut = document.getElementById('sum-out');
+  const sumNights = document.getElementById('sum-nights');
+  const sumRooms = document.getElementById('sum-rooms');
+  const sumTotal = document.getElementById('sum-total');
+
+  if (!data || !data.total || !data.rooms || !data.rooms.length) {
+    window.location.replace('booking.html');
+    return;
+  }
+  sumIn.textContent = data.checkin;
+  sumOut.textContent = data.checkout;
+  sumNights.textContent = data.nights;
+  sumTotal.textContent = money(data.total);
+  sumRooms.innerHTML = data.rooms.map(r => `
+    <div class="sum-row">
+      <span>${r.qty} ${r.name}${r.qty > 1 ? 's' : ''}</span>
+      <strong>${money(r.qty * r.price * data.nights)}</strong>
+    </div>
+  `).join('');
+
+  // ------------- validación (reutiliza setError + showModal) -------------
+  const setErr = (el, msg) => (typeof setError === 'function' ? setError(el, msg) : (el.title = msg));
+  const onlyDigits = s => (s || '').replace(/\D/g, '');
+
+  const validateName = v => {
+    const s = (v || '').trim();
+    if (!s) return 'This field is required.';
+    if (s.length < 2) return 'Minimum 2 characters.';
+    if (!/^[\p{L} ]+$/u.test(s)) return 'Letters and spaces only.';
+    return '';
+  };
+  const validateEmail = v => {
+    const s = (v || '').trim();
+    if (!s) return 'Email is required.';
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s) ? '' : 'Enter a valid email.';
+  };
+  const luhn = num => {
+    let sum = 0, dbl = false;
+    for (let i = num.length - 1; i >= 0; i--) {
+      let d = +num[i];
+      if (dbl) { d *= 2; if (d > 9) d -= 9; }
+      sum += d; dbl = !dbl;
+    }
+    return sum % 10 === 0;
+  };
+ const validateCard = (v) => {
+  const d = (v || '').replace(/\D/g, '');
+  if (!d) return 'Card number is required.';
+  if (d.length !== 16) return 'Card number must be 16 digits.';
+  return '';
+};
+  const validateNameOnCard = v => {
+    const s = (v || '').trim();
+    if (!s) return 'Name on card is required.';
+    if (s.length < 2) return 'Please enter full name.';
+    return '';
+  };
+  const validateExp = v => {
+    const s = (v || '').trim();
+    if (!s) return 'Expiry is required.';
+    const m = /^(\d{2})\s*\/\s*(\d{2})$/.exec(s);
+    if (!m) return 'Use MM/YY.';
+    let [ , mm, yy ] = m; mm = +mm; yy = +yy;
+    if (mm < 1 || mm > 12) return 'Invalid month.';
+    const fullYear = 2000 + yy;
+    const expDate = new Date(fullYear, mm); // primer día del mes siguiente
+    const now = new Date();
+    if (expDate <= new Date(now.getFullYear(), now.getMonth()+1, 1)) return 'Card is expired.';
+    return '';
+  };
+  const validateCVV = v => {
+    const d = onlyDigits(v);
+    if (!d) return 'CVV is required.';
+    if (d.length < 3 || d.length > 4) return 'CVV must be 3–4 digits.';
+    return '';
+  };
+  const validatePhone = v => {
+    const d = onlyDigits(v);
+    if (!d) return ''; // opcional
+    if (d.length < 7 || d.length > 12) return 'Phone must be 7–12 digits.';
+    return '';
+  };
+  const validateZip = v => {
+    const s = (v || '').trim();
+    if (!s) return ''; // opcional
+    if (!/^[A-Za-z0-9\- ]{3,10}$/.test(s)) return 'ZIP/Postal code is invalid.';
+    return '';
+  };
+
+  const validateField = el => {
+    const { id, value } = el;
+    let msg = '';
+    switch (id) {
+      case 'fname':
+      case 'lname':      msg = validateName(value); break;
+      case 'email':      msg = validateEmail(value); break;
+      case 'phone':      msg = validatePhone(value); break;
+      case 'card':       msg = validateCard(value); break;
+      case 'nameoncard': msg = validateNameOnCard(value); break;
+      case 'exp':        msg = validateExp(value); break;
+      case 'cvv':        msg = validateCVV(value); break;
+      case 'zip':        msg = validateZip(value); break;
+      // country/address: opcionales por ahora
+    }
+    setErr(el, msg);
+    return !msg;
+  };
+
+  const ids = ['fname','lname','email','phone','card','nameoncard','exp','cvv','address','country','zip'];
+
+  // feedback inmediato
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('blur',  () => validateField(el));
+    el.addEventListener('input', () => { if (el.classList.contains('input-error')) validateField(el); });
+  });
+
+  // submit con MODAL (reutilizado)
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const requiredOk = ['fname','lname','email','card','nameoncard','exp','cvv']
+      .map(id => validateField(document.getElementById(id)))
+      .every(Boolean);
+
+    // validar opcionales con formato si están completos
+    ['phone','zip'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.value) validateField(el);
+    });
+
+    if (!requiredOk) {
+      showModal('Please complete all required fields.', 'Error');
+      const firstError = ids
+        .map(id => document.getElementById(id))
+        .find(el => el && el.classList.contains('input-error'));
+      firstError?.focus();
+      return;
+    }
+
+    // Éxito (demo)
+    showModal('Payment successful! A confirmation email has been sent.', 'Payment');
+    localStorage.removeItem('sb_checkout');
+    form.reset();
+    ids.forEach(id => { const el = document.getElementById(id); if (el) setErr(el, ''); });
+  });
+});
+
+// --- Mascara para #card: límite y grupos de 4 ---
+// --- Mascara para #card: 16 dígitos y grupos de 4 ---
+const cardEl = document.getElementById('card');
+if (cardEl) {
+  // 16 dígitos → 3 espacios → longitud total 19
+  cardEl.setAttribute('maxlength', '19');
+
+  const formatCard = (digits) => digits.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+
+  const handleCardInput = (e) => {
+    const el = e.target;
+    const prev = el.value;
+    const caretPrev = el.selectionStart ?? prev.length;
+
+    // dígitos a la izquierda del caret (para reubicarlo luego)
+    const digitsLeft = prev.slice(0, caretPrev).replace(/\D/g, '').length;
+
+    // solo dígitos, cap a 16
+    const digits = prev.replace(/\D/g, '').slice(0, 16);
+    const next = formatCard(digits);
+
+    el.value = next;
+
+    // reubicar caret manteniendo “cantidad de dígitos previos”
+    let caret = 0, count = 0;
+    while (count < digitsLeft && caret < next.length) {
+      if (/\d/.test(next[caret])) count++;
+      caret++;
+    }
+    el.setSelectionRange(caret, caret);
+  };
+
+  cardEl.addEventListener('input', handleCardInput);
+  cardEl.addEventListener('blur', handleCardInput);
+}
