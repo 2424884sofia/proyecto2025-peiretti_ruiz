@@ -20,7 +20,7 @@
 ---
 
 ## Link de GitHub Pages
-[Ver proyecto en GitHub Pages](despues agregar)
+[Ver proyecto en GitHub Pages](https://2424884sofia.github.io/proyecto2025-peiretti_ruiz/)
 
 ---
 
