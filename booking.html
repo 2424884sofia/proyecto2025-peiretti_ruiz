@@ -12,7 +12,7 @@
     <meta name="keywords" content="santorini, hotel, reserva, booking, habitaciones" />
 
     <!-- Favicon -->
-    <link rel="icon" href="imagenes/favicon.png" type="image/x-icon" />
+    <link rel="icon" href="Imagenes/favicon.png" type="image/x-icon" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,8 +45,12 @@
             <div class="campo">
                 <label for="checkin">Check-in and check-out</label>
                 <div class="rango-fecha">
+                    <label for="checkin" class="sr-only">Check-in date</label>
                     <input type="date" id="checkin" name="checkin" required size="10" maxlength="10">
+
                     <span class="dash">—</span>
+
+                    <label for="checkout" class="sr-only">Check-out date</label>
                     <input type="date" id="checkout" name="checkout" required size="10" maxlength="10">
                 </div>
             </div>
@@ -70,11 +74,11 @@
         <div class="rooms-layout">
             <div class="rooms-list">
                 <article class="room-card">
-                    <img class="room-img" src="imagenes/standardRoom.png" alt="Standard Room">
+                    <img class="room-img" src="Imagenes/standardRoom.png" alt="Standard Room">
                     <div class="room-body">
                         <header class="room-head">
                             <h3 class="room-name">Standard Room</h3>
-                            <div class="room-price">$200.00</div> <!-- despues agregar lo de tipo precio -->
+                            <div class="room-price">$200.00</div>
                         </header>
                         <ul class="room-meta">
                             <li>👤 1 adult max</li>
@@ -83,23 +87,27 @@
                         <a href="#" class="room-more" data-action="room-details" data-room="std">More details</a>
 
                         <div class="room-cant">
-                            <span class="qty-label">Add rooms</span>
+                            <label class="qty-label" for="std_qty">Add rooms</label>
                             <div class="counter nojs">
-                                <button type="button" class="qty-btn" data-action="dec" data-target="std_qty">−</button>
-                                <input type="number" name="std_qty" min="0" max="9" value="0" inputmode="numeric"
-                                    size="2" maxlength="1">
-                                <button type="button" class="qty-btn" data-action="inc" data-target="std_qty">+</button>
+                                <button type="button" class="qty-btn" data-action="dec" data-target="std_qty"
+                                    aria-label="Decrease Standard rooms">−
+                                </button>
+                                <input id="std_qty" type="number" name="std_qty" min="0" max="9" value="0"
+                                    inputmode="numeric" size="2" maxlength="1" aria-labelledby="std_qty_label">
+                                <button type="button" class="qty-btn" data-action="inc" data-target="std_qty"
+                                    aria-label="Increase Standard rooms">+
+                                </button>
                             </div>
                         </div>
                     </div>
                 </article>
 
                 <article class="room-card">
-                    <img class="room-img" src="imagenes/superiorRoom.png" alt="Superior Room">
+                    <img class="room-img" src="Imagenes/superiorRoom.png" alt="Superior Room">
                     <div class="room-body">
                         <header class="room-head">
                             <h3 class="room-name">Superior Room</h3>
-                            <div class="room-price">$300.00</div> <!-- despues agregar lo de tipo precio -->
+                            <div class="room-price">$300.00</div>
                         </header>
 
                         <ul class="room-meta">
@@ -110,22 +118,26 @@
                         <a href="#" class="room-more" data-action="room-details" data-room="sup">More details</a>
 
                         <div class="room-cant">
-                            <span class="qty-label">Add rooms</span>
+                            <label class="qty-label" for="sup_qty">Add rooms</label>
                             <div class="counter nojs">
-                                <button type="button" class="qty-btn" data-action="dec" data-target="sup_qty">−</button>
-                                <input type="number" name="sup_qty" min="0" max="9" value="0" inputmode="numeric"
-                                    size="2" maxlength="1">
-                                <button type="button" class="qty-btn" data-action="inc" data-target="sup_qty">+</button>
+                                <button type="button" class="qty-btn" data-action="dec" data-target="sup_qty"
+                                    aria-label="Decrease Superior rooms">−
+                                </button>
+                                <input id="sup_qty" type="number" name="sup_qty" min="0" max="9" value="0"
+                                    inputmode="numeric" size="2" maxlength="1">
+                                <button type="button" class="qty-btn" data-action="inc" data-target="sup_qty"
+                                    aria-label="Increase Superior rooms">+
+                                </button>
                             </div>
                         </div>
                     </div>
                 </article>
                 <article class="room-card">
-                    <img class="room-img" src="imagenes/familySuite.png" alt="Family Suite">
+                    <img class="room-img" src="Imagenes/familySuite.png" alt="Family Suite">
                     <div class="room-body">
                         <header class="room-head">
                             <h3 class="room-name">Family Suite</h3>
-                            <div class="room-price">$400.00</div> <!-- despues agregar lo de tipo precio -->
+                            <div class="room-price">$400.00</div>
                         </header>
 
                         <ul class="room-meta">
@@ -135,14 +147,19 @@
                         <a href="#" class="room-more" data-action="room-details" data-room="fam">More details</a>
 
                         <div class="room-cant">
-                            <span class="qty-label">Add rooms</span>
+                            <label class="qty-label" for="fam_qty">Add rooms</label>
                             <div class="counter nojs">
-                                <button type="button" class="qty-btn" data-action="dec" data-target="fam_qty">−</button>
-                                <input type="number" name="fam_qty" min="0" max="9" value="0" inputmode="numeric"
-                                    size="2" maxlength="1">
-                                <button type="button" class="qty-btn" data-action="inc" data-target="fam_qty">+</button>
+                                <button type="button" class="qty-btn" data-action="dec" data-target="fam_qty"
+                                    aria-label="Decrease Family suites">−
+                                </button>
+                                <input id="fam_qty" type="number" name="fam_qty" min="0" max="9" value="0"
+                                    inputmode="numeric" size="2" maxlength="1">
+                                <button type="button" class="qty-btn" data-action="inc" data-target="fam_qty"
+                                    aria-label="Increase Family suites">+
+                                </button>
                             </div>
                         </div>
+
                     </div>
                 </article>
 
