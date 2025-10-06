@@ -56,7 +56,7 @@ main {
     justify-content: center; /* centra el UL */
 }
 
-.nav{
+.nav {
     list-style: none;
     display: flex;
     gap: 3rem;
@@ -66,7 +66,6 @@ main {
     padding: 0 var(--container-pad);
     margin: 0 auto;
 }
-
 
 
 .nav a {
@@ -886,8 +885,8 @@ main {
 }
 
 .counter.nojs input[type="number"] {
-    -moz-appearance: textfield;  /* Firefox */
-    appearance: textfield;       /* Estándar donde esté soportado */
+    -moz-appearance: textfield; /* Firefox */
+    appearance: textfield; /* Estándar donde esté soportado */
 }
 
 /* Modal de Booking  */

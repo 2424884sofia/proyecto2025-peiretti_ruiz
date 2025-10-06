@@ -4,235 +4,250 @@
 <head>
     <title>Santorini Blue | Book a Room</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <meta name="author" content="Peiretti Sofia, Ruiz Lola" />
+    <meta name="author" content="Peiretti Sofia, Ruiz Lola"/>
     <meta name="description"
-        content="Reserve su habitación en Santorini Blue: vista al mar, piscina y atención personalizada." />
-    <meta name="keywords" content="santorini, hotel, reserva, booking, habitaciones" />
+          content="Reserve su habitación en Santorini Blue: vista al mar, piscina y atención personalizada."/>
+    <meta name="keywords" content="santorini, hotel, reserva, booking, habitaciones"/>
 
     <!-- Favicon -->
-    <link rel="icon" href="Imagenes/favicon.png" type="image/x-icon" />
+    <link rel="icon" href="Imagenes/favicon.png" type="image/x-icon"/>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@600&display=swap"
-        rel="stylesheet">
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@600&display=swap"
+            rel="stylesheet">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/styles.css"/>
 </head>
 
 <body>
-    <header class="header">
-        <nav aria-label="Primaria">
-            <ul class="nav">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="booking.html" aria-current="page">Book a room</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-    <section class="imagen-acostada">
-        <img src="Imagenes/imagenbook.png" alt="Vista del resort Santorini Blue">
-    </section>
-    <section class="container">
-        <h2 class="titulo">BOOK A ROOM</h2>
-        <form class="book-form" action="#" novalidate>
-            <div class="campo">
-                <label for="checkin">Check-in and check-out</label>
-                <div class="rango-fecha">
-                    <label for="checkin" class="sr-only">Check-in date</label>
-                    <input type="date" id="checkin" name="checkin" required size="10" maxlength="10">
+<header class="header">
+    <nav aria-label="Primaria">
+        <ul class="nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="booking.html" aria-current="page">Book a room</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+</header>
 
-                    <span class="dash">—</span>
+<section class="imagen-acostada">
+    <img src="Imagenes/imagenbook.png" alt="Vista del resort Santorini Blue">
+</section>
 
-                    <label for="checkout" class="sr-only">Check-out date</label>
-                    <input type="date" id="checkout" name="checkout" required size="10" maxlength="10">
-                </div>
+<section class="container">
+    <h2 class="titulo">BOOK A ROOM</h2>
+    <form class="book-form" action="#" novalidate>
+        <div class="campo">
+            <label for="checkin">Check-in and check-out</label>
+            <div class="rango-fecha">
+                <label for="checkin" class="sr-only">Check-in date</label>
+                <input type="date" id="checkin" name="checkin" required size="10" maxlength="10">
+
+                <span class="dash">—</span>
+
+                <label for="checkout" class="sr-only">Check-out date</label>
+                <input type="date" id="checkout" name="checkout" required size="10" maxlength="10">
             </div>
-            <div class="campo">
-                <label for="guests">Room and guests</label>
-                <select id="guests" name="guests">
-                    <option value="all" selected>Show all rooms</option>
-                    <option value="1">For room · 1 guest</option>
-                    <option value="2">For room · 2 guests</option>
-                    <option value="3-5">For room · 3–5 guests</option>
-                </select>
+        </div>
 
-            </div>
-            <div class="search">
-                <button type="submit" class="btn-buscar">Search</button>
-            </div>
-        </form>
-    </section>
-    <section class="rooms">
-        <h2 class="sr-titulo">Select room</h2>
-        <div class="rooms-layout">
-            <div class="rooms-list">
-                <article class="room-card">
-                    <img class="room-img" src="Imagenes/standardRoom.png" alt="Standard Room">
-                    <div class="room-body">
-                        <header class="room-head">
-                            <h3 class="room-name">Standard Room</h3>
-                            <div class="room-price">$200.00</div>
-                        </header>
-                        <ul class="room-meta">
-                            <li>👤 1 adult max</li>
-                            <li>⛋ 30 m²</li>
-                        </ul>
-                        <a href="#" class="room-more" data-action="room-details" data-room="std">More details</a>
+        <div class="campo">
+            <label for="guests">Room and guests</label>
+            <select id="guests" name="guests">
+                <option value="all" selected>Show all rooms</option>
+                <option value="1">For room · 1 guest</option>
+                <option value="2">For room · 2 guests</option>
+                <option value="3-5">For room · 3–5 guests</option>
+            </select>
+        </div>
 
-                        <div class="room-cant">
-                            <label class="qty-label" for="std_qty">Add rooms</label>
-                            <div class="counter nojs">
-                                <button type="button" class="qty-btn" data-action="dec" data-target="std_qty"
+        <div class="search">
+            <button type="submit" class="btn-buscar">Search</button>
+        </div>
+    </form>
+</section>
+
+<section class="rooms">
+    <h2 class="sr-titulo">Select room</h2>
+
+    <div class="rooms-layout">
+        <div class="rooms-list">
+
+            <!-- STANDARD -->
+            <article class="room-card"
+                     data-images="Imagenes/standardRoom_1.jpg, Imagenes/standardRoom_2.jpg, Imagenes/standardRoom_3.jpg">
+                <img class="room-img" src="Imagenes/standardRoom.png" alt="Standard Room">
+                <div class="room-body">
+                    <header class="room-head">
+                        <h3 class="room-name">Standard Room</h3>
+                        <div class="room-price">$200.00</div>
+                    </header>
+                    <ul class="room-meta">
+                        <li>👤 1 adult max</li>
+                        <li>⛋ 30 m²</li>
+                    </ul>
+                    <a href="#" class="room-more" data-action="room-details" data-room="std">More details</a>
+
+                    <div class="room-cant">
+                        <label class="qty-label" for="std_qty">Add rooms</label>
+                        <div class="counter nojs">
+                            <button type="button" class="qty-btn" data-action="dec" data-target="std_qty"
                                     aria-label="Decrease Standard rooms">−
-                                </button>
-                                <input id="std_qty" type="number" name="std_qty" min="0" max="9" value="0"
-                                    inputmode="numeric" size="2" maxlength="1" aria-labelledby="std_qty_label">
-                                <button type="button" class="qty-btn" data-action="inc" data-target="std_qty"
+                            </button>
+                            <input id="std_qty" type="number" name="std_qty" min="0" max="9" value="0"
+                                   inputmode="numeric" size="2" maxlength="1" aria-labelledby="std_qty_label">
+                            <button type="button" class="qty-btn" data-action="inc" data-target="std_qty"
                                     aria-label="Increase Standard rooms">+
-                                </button>
-                            </div>
+                            </button>
                         </div>
                     </div>
-                </article>
+                </div>
+            </article>
 
-                <article class="room-card">
-                    <img class="room-img" src="Imagenes/superiorRoom.png" alt="Superior Room">
-                    <div class="room-body">
-                        <header class="room-head">
-                            <h3 class="room-name">Superior Room</h3>
-                            <div class="room-price">$300.00</div>
-                        </header>
+            <!-- SUPERIOR -->
+            <article class="room-card"
+                     data-images="Imagenes/superiorRoom_1.jpg, Imagenes/superiorRoom_2.jpg, Imagenes/superiorRoom_3.jpg">
+                <img class="room-img" src="Imagenes/superiorRoom.png" alt="Superior Room">
+                <div class="room-body">
+                    <header class="room-head">
+                        <h3 class="room-name">Superior Room</h3>
+                        <div class="room-price">$300.00</div>
+                    </header>
 
-                        <ul class="room-meta">
-                            <li>👥 2 adults max</li>
-                            <li>⛋ 40 m²</li>
-                        </ul>
+                    <ul class="room-meta">
+                        <li>👥 2 adults max</li>
+                        <li>⛋ 40 m²</li>
+                    </ul>
 
-                        <a href="#" class="room-more" data-action="room-details" data-room="sup">More details</a>
+                    <a href="#" class="room-more" data-action="room-details" data-room="sup">More details</a>
 
-                        <div class="room-cant">
-                            <label class="qty-label" for="sup_qty">Add rooms</label>
-                            <div class="counter nojs">
-                                <button type="button" class="qty-btn" data-action="dec" data-target="sup_qty"
+                    <div class="room-cant">
+                        <label class="qty-label" for="sup_qty">Add rooms</label>
+                        <div class="counter nojs">
+                            <button type="button" class="qty-btn" data-action="dec" data-target="sup_qty"
                                     aria-label="Decrease Superior rooms">−
-                                </button>
-                                <input id="sup_qty" type="number" name="sup_qty" min="0" max="9" value="0"
-                                    inputmode="numeric" size="2" maxlength="1">
-                                <button type="button" class="qty-btn" data-action="inc" data-target="sup_qty"
+                            </button>
+                            <input id="sup_qty" type="number" name="sup_qty" min="0" max="9" value="0"
+                                   inputmode="numeric" size="2" maxlength="1">
+                            <button type="button" class="qty-btn" data-action="inc" data-target="sup_qty"
                                     aria-label="Increase Superior rooms">+
-                                </button>
-                            </div>
+                            </button>
                         </div>
                     </div>
-                </article>
-                <article class="room-card">
-                    <img class="room-img" src="Imagenes/familySuite.png" alt="Family Suite">
-                    <div class="room-body">
-                        <header class="room-head">
-                            <h3 class="room-name">Family Suite</h3>
-                            <div class="room-price">$400.00</div>
-                        </header>
+                </div>
+            </article>
 
-                        <ul class="room-meta">
-                            <li>👥 2 adults max</li>
-                            <li>⛋ 50 m²</li>
-                        </ul>
-                        <a href="#" class="room-more" data-action="room-details" data-room="fam">More details</a>
+            <!-- FAMILY -->
+            <article class="room-card"
+                     data-images="Imagenes/familySuite_1.jpg, Imagenes/familySuite_2.jpg, Imagenes/familySuite_3.jpg">
+                <img class="room-img" src="Imagenes/familySuite.png" alt="Family Suite">
+                <div class="room-body">
+                    <header class="room-head">
+                        <h3 class="room-name">Family Suite</h3>
+                        <div class="room-price">$400.00</div>
+                    </header>
 
-                        <div class="room-cant">
-                            <label class="qty-label" for="fam_qty">Add rooms</label>
-                            <div class="counter nojs">
-                                <button type="button" class="qty-btn" data-action="dec" data-target="fam_qty"
+                    <ul class="room-meta">
+                        <li>👥 2 adults max</li>
+                        <li>⛋ 50 m²</li>
+                    </ul>
+                    <a href="#" class="room-more" data-action="room-details" data-room="fam">More details</a>
+
+                    <div class="room-cant">
+                        <label class="qty-label" for="fam_qty">Add rooms</label>
+                        <div class="counter nojs">
+                            <button type="button" class="qty-btn" data-action="dec" data-target="fam_qty"
                                     aria-label="Decrease Family suites">−
-                                </button>
-                                <input id="fam_qty" type="number" name="fam_qty" min="0" max="9" value="0"
-                                    inputmode="numeric" size="2" maxlength="1">
-                                <button type="button" class="qty-btn" data-action="inc" data-target="fam_qty"
+                            </button>
+                            <input id="fam_qty" type="number" name="fam_qty" min="0" max="9" value="0"
+                                   inputmode="numeric" size="2" maxlength="1">
+                            <button type="button" class="qty-btn" data-action="inc" data-target="fam_qty"
                                     aria-label="Increase Family suites">+
-                                </button>
-                            </div>
+                            </button>
                         </div>
-
                     </div>
-                </article>
-
-            </div>
-
-            <aside class="resumen">
-                <h3 class="resumen-title">Your Reservation</h3>
-                <div class="resumen-line">
-                    <span>Check-In:</span>
-                    <span class="muted">—</span>
                 </div>
-                <div class="resumen-line">
-                    <span>Check-Out:</span>
-                    <span class="muted">—</span>
-                </div>
+            </article>
 
-                <hr class="resumen-sep">
-
-                <p class="resumen-note">1 room, 2 adults, 1 night</p>
-                <ul class="resumen-items" id="summary-items"></ul>
-                <p class="resumen-warn">Please add rooms</p>
-
-                <hr class="resumen-sep">
-
-                <div class="resumen-total">
-                    <span>Total</span>
-                    <span id="summary-total">$0.00</span>
-                </div>
-                <button type="button" class="btn-continue">Continue</button>
-            </aside>
         </div>
-    </section>
-    <div id="app-modal" class="modal-backdrop" aria-hidden="true">
-        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-msg">
-            <button class="modal-close" type="button" aria-label="Close">×</button>
-            <h3 id="modal-title">Error</h3>
-            <div id="modal-msg">Mensaje…</div>
-            <div class="modal-actions">
-                <button type="button" class="btn-primary" id="modal-ok">OK</button>
+
+        <aside class="resumen">
+            <h3 class="resumen-title">Your Reservation</h3>
+            <div class="resumen-line">
+                <span>Check-In:</span>
+                <span class="muted">—</span>
             </div>
+            <div class="resumen-line">
+                <span>Check-Out:</span>
+                <span class="muted">—</span>
+            </div>
+
+            <hr class="resumen-sep">
+
+            <p class="resumen-note">1 room, 2 adults, 1 night</p>
+            <ul class="resumen-items" id="summary-items"></ul>
+            <p class="resumen-warn">Please add rooms</p>
+
+            <hr class="resumen-sep">
+
+            <div class="resumen-total">
+                <span>Total</span>
+                <span id="summary-total">$0.00</span>
+            </div>
+            <button type="button" class="btn-continue">Continue</button>
+        </aside>
+    </div>
+</section>
+
+<!-- Modal genérico -->
+<div id="app-modal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-msg">
+        <button class="modal-close" type="button" aria-label="Close">×</button>
+        <h3 id="modal-title">Error</h3>
+        <div id="modal-msg">Mensaje…</div>
+        <div class="modal-actions">
+            <button type="button" class="btn-primary" id="modal-ok">OK</button>
         </div>
     </div>
+</div>
 
-    <div id="room-modal" class="room-backdrop" aria-hidden="true">
-        <div class="room-dialog" role="dialog" aria-modal="true" aria-labelledby="room-title">
-            <button class="room-close" type="button" aria-label="Close">×</button>
+<!-- Modal de habitaciones con slider -->
+<div id="room-modal" class="room-backdrop" aria-hidden="true">
+    <div class="room-dialog" role="dialog" aria-modal="true" aria-labelledby="room-title">
+        <button class="room-close" type="button" aria-label="Close">×</button>
 
-            <div class="room-media">
-                <div class="room-slider" id="room-slider">
-                    <!-- slides dinámicos, falta agregar img -->
-                    <button class="nav nav-prev" type="button" aria-label="Previous">‹</button>
-                    <button class="nav nav-next" type="button" aria-label="Next">›</button>
-                </div>
-                <div class="room-dots" id="room-dots"></div>
+        <div class="room-media">
+            <div class="room-slider" id="room-slider">
+                <button class="nav nav-prev" type="button" aria-label="Previous">‹</button>
+                <button class="nav nav-next" type="button" aria-label="Next">›</button>
+            </div>
+            <div class="room-dots" id="room-dots"></div>
+        </div>
+
+        <div class="room-info">
+            <h2 id="room-title">Room name</h2>
+
+            <div class="room-overview">
+                <div><span>👤</span><span id="room-capacity">—</span></div>
+                <div><span>⛋</span><span id="room-size">—</span></div>
             </div>
 
-            <div class="room-info">
-                <h2 id="room-title">Room name</h2>
-
-                <div class="room-overview">
-                    <div><span>👤</span><span id="room-capacity">—</span></div>
-                    <div><span>⛋</span><span id="room-size">—</span></div>
-                </div>
-
-                <h3 class="room-subttl">About this room</h3>
-                <p id="room-desc" class="room-desc line-clamp"></p>
-                <h3 class="room-subttl">Amenities</h3>
-                <ul id="room-amenities" class="room-amenities"></ul>
-            </div>
+            <h3 class="room-subttl">About this room</h3>
+            <p id="room-desc" class="room-desc line-clamp"></p>
+            <h3 class="room-subttl">Amenities</h3>
+            <ul id="room-amenities" class="room-amenities"></ul>
         </div>
     </div>
+</div>
 
-    <script src="js/app.js" defer></script>
+<script src="js/app.js" defer></script>
 </body>
+
 
 </html>

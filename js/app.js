@@ -66,15 +66,15 @@ const validateDates = (inEl, outEl) => {
     today.setHours(0, 0, 0, 0);
 
     if (inDate < today) {
-        showErrorAndClear(inEl, "La fecha de Check-in no puede ser anterior a hoy.");
+        showErrorAndClear(inEl, "The check-in date cannot be earlier than today.");
         return false;
     }
     if (outDate < today) {
-        showErrorAndClear(outEl, "La fecha de Check-out no puede ser anterior a hoy.");
+        showErrorAndClear(outEl, "The check-out date cannot be earlier than today.");
         return false;
     }
     if (outDate <= inDate) {
-        showErrorAndClear(outEl, "La fecha de Check-out debe ser posterior al Check-in.");
+        showErrorAndClear(outEl, "The check-out date must be after the check-in date.");
         return false;
     }
     return true;
@@ -98,7 +98,7 @@ const validateRoomQty = (input) => {
         num < Number(input.min ?? 0) ||
         num > Number(input.max ?? 9)
     ) {
-        showErrorAndClear(input, "Cantidad inválida (debe ser un entero entre 0 y 9).");
+        showErrorAndClear(input, "Invalid quantity (must be an integer between 0 and 9).");
         return 0;
     }
     return num;
@@ -187,26 +187,26 @@ document.addEventListener("click", (e) => {
  * @return {void}
  */
 const updateSummary = (inEl, outEl) => {
-    const { inSpan, outSpan, totalSpan, warn, note } = getSummaryRefs();
+    const {inSpan, outSpan, totalSpan, warn, note} = getSummaryRefs();
 
-    const inDate  = parseISODate(inEl.value);
+    const inDate = parseISODate(inEl.value);
     const outDate = parseISODate(outEl.value);
-    const nights  = calcNights(inDate, outDate);
+    const nights = calcNights(inDate, outDate);
 
     const stdQty = validateRoomQty(document.querySelector('input[name="std_qty"]'));
     const supQty = validateRoomQty(document.querySelector('input[name="sup_qty"]'));
     const famQty = validateRoomQty(document.querySelector('input[name="fam_qty"]'));
 
-    if (inSpan)  inSpan.textContent  = inDate  ? inEl.value  : "—";
+    if (inSpan) inSpan.textContent = inDate ? inEl.value : "—";
     if (outSpan) outSpan.textContent = outDate ? outEl.value : "—";
 
     const listEl = document.getElementById("summary-items");
 
     if (listEl) {
         const items = [];
-        if (stdQty > 0) items.push({ id: "std", text: pluralize(stdQty, "Standard Room") });
-        if (supQty > 0) items.push({ id: "sup", text: pluralize(supQty, "Superior Room") });
-        if (famQty > 0) items.push({ id: "fam", text: pluralize(famQty, "Family Room") });
+        if (stdQty > 0) items.push({id: "std", text: pluralize(stdQty, "Standard Room")});
+        if (supQty > 0) items.push({id: "sup", text: pluralize(supQty, "Superior Room")});
+        if (famQty > 0) items.push({id: "fam", text: pluralize(famQty, "Family Room")});
 
         if (note) note.textContent = "";
 
@@ -217,7 +217,6 @@ const updateSummary = (inEl, outEl) => {
       </li>
     `).join("");
 
-        // ocultar aviso si hay items
         if (warn instanceof HTMLElement) {
             const hasItems = items.length > 0;
             warn.hidden = hasItems;
@@ -238,7 +237,6 @@ const updateSummary = (inEl, outEl) => {
             else note.textContent = label || "";
         }
 
-        // ocultar aviso si hay label
         if (warn instanceof HTMLElement) {
             const hasLabel = !!label && label.trim().length > 0;
             warn.hidden = hasLabel;
@@ -246,10 +244,9 @@ const updateSummary = (inEl, outEl) => {
         }
     }
 
-    const total = computeTotal({ std: stdQty, sup: supQty, fam: famQty }, nights);
+    const total = computeTotal({std: stdQty, sup: supQty, fam: famQty}, nights);
     if (totalSpan) totalSpan.textContent = formatPrice(total);
 
-    // bind para quitar ítems una sola vez
     const bindListRemove = () => {
         const ul = document.getElementById("summary-items");
         if (!ul || ul.dataset.bound) return;
@@ -257,11 +254,11 @@ const updateSummary = (inEl, outEl) => {
             const btn = e.target.closest("[data-remove-room]");
             if (!btn) return;
             const id = btn.dataset.removeRoom; // "std" | "sup" | "fam"
-            const nameById = { std: "std_qty", sup: "sup_qty", fam: "fam_qty" };
+            const nameById = {std: "std_qty", sup: "sup_qty", fam: "fam_qty"};
             const input = document.querySelector(`input[name="${nameById[id]}"]`);
             if (!input) return;
             input.value = "0";
-            input.dispatchEvent(new Event("input", { bubbles: true }));
+            input.dispatchEvent(new Event("input", {bubbles: true}));
         });
         ul.dataset.bound = "1";
     };
@@ -337,7 +334,7 @@ const handleSubmit = (e) => {
     const outEl = document.getElementById("checkout");
 
     if (!inEl.value || !outEl.value) {
-        showErrorAndClear(outEl, "Completá Check-in y Check-out.");
+        showErrorAndClear(outEl, "Complete Check-in and Check-out.");
         return;
     }
     if (!validateDates(inEl, outEl)) return;
@@ -414,7 +411,6 @@ const restoreFromCheckout = () => {
     updateSummary(inEl, outEl);
 };
 
-/* ========= Modal reutilizable (inyecta si falta) ========= */
 const ensureModal = () => {
     if (document.getElementById('app-modal')) return;
     const overlay = document.createElement('div');
@@ -432,7 +428,6 @@ const ensureModal = () => {
     </div>`;
     document.body.appendChild(overlay);
 
-    // listeners básicos
     overlay.addEventListener('click', (e) => {
         if (e.target.id === 'app-modal') hideModal();
     });
@@ -509,6 +504,7 @@ const ROOMS_DB = {
             "In-room safe",
             "Free toiletries"
         ],
+        images: ["Imagenes/carruselStandard"]
     },
     sup: {
         title: "Superior Room",
@@ -525,6 +521,7 @@ const ROOMS_DB = {
             "Bathrobe & slippers",
             "USB-C bedside chargers"
         ],
+        images: ["Imagenes/carruselSuperior"]
     },
     fam: {
         title: "Family Suite",
@@ -541,6 +538,7 @@ const ROOMS_DB = {
             "Crib on request",
             "Blackout curtains"
         ],
+        images: ["Imagenes/carruselFamily"]
     },
 };
 
@@ -689,19 +687,19 @@ document.querySelector(".btn-continue")?.addEventListener("click", () => {
     today.setHours(0, 0, 0, 0);
 
     if (!inDate || !outDate) {
-        showModal("Completá Check-in y Check-out.", "Error");
+        showModal("Complete Check-in and Check-out.", "Error");
         return;
     }
     if (inDate < today) {
-        showModal("La fecha de Check-in no puede ser anterior a hoy.", "Error");
+        showModal("The check-in date cannot be earlier than today.", "Error");
         return;
     }
     if (outDate < today) {
-        showModal("La fecha de Check-out no puede ser anterior a hoy.", "Error");
+        showModal("The check-out date cannot be earlier than today.", "Error");
         return;
     }
     if (data.nights <= 0) {
-        showModal("La fecha de Check-out debe ser posterior al Check-in.", "Error");
+        showModal("The check-out date must be after the check-in date.", "Error");
         return;
     }
     if (data.totalRooms === 0) {
@@ -722,7 +720,6 @@ document.querySelector(".btn-continue")?.addEventListener("click", () => {
  * @param {string} msg - mensaje de error ("" para limpiar)
  */
 const setError = (el, msg) => {
-    // Contenedor .field es el padre directo en tu HTML
     const field = el.closest('.field') || el.parentElement;
     let help = field.querySelector('.field-error');
     if (!help) {
@@ -770,9 +767,9 @@ const validateEmail = (v) => {
  * @returns {string}
  */
 const validatePhone = (v) => {
-    const digits = (v || '').replace(/\D/g, '');
-    if (!digits) return '';
-    if (digits.length < 7 || digits.length > 12) return 'Teléfono inválido (7–12 dígitos).';
+    const d = (v || '').replace(/\D/g, '');
+    if (!d) return '';
+    if (!/^\d{7,15}$/.test(d)) return 'Phone must be 7–15 digits.';
     return '';
 };
 
@@ -785,8 +782,7 @@ const validatePhone = (v) => {
  */
 const validateMessage = (v) => {
     const s = (v || '').trim();
-    // if (!s) return 'Campo obligatorio.';
-    if (s.length > 500) return 'Máximo 500 caracteres.';
+    if (s.length > 500) return 'Maximum 500 characters.';
     return '';
 };
 
@@ -830,7 +826,6 @@ const validateContactForm = () => {
     return true;
 };
 
-/* ====== Eventos: feedback en tiempo real + Submit ====== */
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form.contact-form');
     if (!form) return;
@@ -841,21 +836,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!el) return;
         el.addEventListener('blur', () => validateField(el));
         el.addEventListener('input', () => {
-            // Limpia mientras escribe si había error
             if (el.classList.contains('input-error')) validateField(el);
         });
     });
 
     form.addEventListener('submit', (e) => {
-        e.preventDefault();                     // nunca recarga ni envía
-        const valido = validateContactForm();   // pinta errores debajo de cada campo
+        e.preventDefault();
+        const valido = validateContactForm();
 
         if (!valido) {
-            showModal('Por favor completá de manera correcta los campos obligatorios.', 'Error');
+            showModal('Please complete the required fields correctly.', 'Error');
             return;
         }
 
-        showModal('¡Gracias! Tu mensaje fue enviado.', 'Message sent');
+        showModal('Thank you! Your message has been sent.', 'Message sent');
         form.reset();
         ['fname', 'lname', 'email', 'phone', 'message'].forEach(id => {
             const el = document.getElementById(id);
@@ -865,12 +859,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-/* ======================= PAYMENT ======================= */
+/* PAYMENT */
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('pay-form');
-    if (!form) return; // no estamos en payment.html
+    if (!form) return;
 
-    // ---- pintar resumen desde localStorage (igual que tu inline) ----
     const money = n => new Intl.NumberFormat("en-US", {style: "currency", currency: "USD"}).format(n || 0);
     const data = (() => {
         try {
@@ -901,7 +894,6 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   `).join('');
 
-    // ------------- validación (reutiliza setError + showModal) -------------
     const setErr = (el, msg) => (typeof setError === 'function' ? setError(el, msg) : (el.title = msg));
     const onlyDigits = s => (s || '').replace(/\D/g, '');
 
@@ -934,12 +926,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const d = (v || '').replace(/\D/g, '');
         if (!d) return 'Card number is required.';
         if (d.length !== 16) return 'Card number must be 16 digits.';
-        return luhn(d) ? '' : 'Invalid card number.';  // ← usa luhn
+        return luhn(d) ? '' : 'Invalid card number.';
     };
-    const validateNameOnCard = v => {
+    const validateNameOnCard = (v) => {
         const s = (v || '').trim();
         if (!s) return 'Name on card is required.';
-        if (s.length < 2) return 'Please enter full name.';
+        if (!/^[A-Za-zÀ-ÿÑñ ]{2,40}$/.test(s)) return 'Use letters and spaces only.';
         return '';
     };
     const validateExp = v => {
@@ -952,27 +944,27 @@ document.addEventListener('DOMContentLoaded', () => {
         yy = +yy;
         if (mm < 1 || mm > 12) return 'Invalid month.';
         const fullYear = 2000 + yy;
-        const expDate = new Date(fullYear, mm); // primer día del mes siguiente
+        const expDate = new Date(fullYear, mm);
         const now = new Date();
         if (expDate <= new Date(now.getFullYear(), now.getMonth() + 1, 1)) return 'Card is expired.';
         return '';
     };
-    const validateCVV = v => {
-        const d = onlyDigits(v);
-        if (!d) return 'CVV is required.';
-        if (d.length < 3 || d.length > 4) return 'CVV must be 3–4 digits.';
+    const validateCvv = (v) => {
+        const d = (v || '').replace(/\D/g, '');
+        if (!/^\d{3,4}$/.test(d)) return 'CVV must be 3–4 digits.';
         return '';
     };
     const validatePhone = v => {
         const d = onlyDigits(v);
-        if (!d) return ''; // opcional
+        if (!d) return '';
         if (d.length < 7 || d.length > 12) return 'Phone must be 7–12 digits.';
         return '';
     };
     const validateZip = v => {
-        const s = (v || '').trim();
-        if (!s) return ''; // opcional
-        if (!/^[A-Za-z0-9\- ]{3,10}$/.test(s)) return 'ZIP/Postal code is invalid.';
+        const d = (v || '').replace(/\D/g, '');
+        if (!d) return '';
+        if (d.length > 4) return 'ZIP must be up to 4 digits.';
+        if (!/^\d{1,4}$/.test(d)) return 'ZIP must contain digits only.';
         return '';
     };
 
@@ -1005,7 +997,6 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'zip':
                 msg = validateZip(value);
                 break;
-            // country/address: opcionales por ahora
         }
         setErr(el, msg);
         return !msg;
@@ -1013,7 +1004,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const ids = ['fname', 'lname', 'email', 'phone', 'card', 'nameoncard', 'exp', 'cvv', 'address', 'country', 'zip'];
 
-    // feedback inmediato
     ids.forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
@@ -1023,7 +1013,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // submit con MODAL (reutilizado)
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -1031,7 +1020,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(id => validateField(document.getElementById(id)))
             .every(Boolean);
 
-        // validar opcionales con formato si están completos
         ['phone', 'zip'].forEach(id => {
             const el = document.getElementById(id);
             if (el && el.value) validateField(el);
@@ -1046,7 +1034,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Éxito (demo)
         showModal('Payment successful! A confirmation email has been sent.', 'Payment');
         localStorage.removeItem('sb_checkout');
         form.reset();
@@ -1057,11 +1044,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// --- Mascara para #card: límite y grupos de 4 ---
-// --- Mascara para #card: 16 dígitos y grupos de 4 ---
+
 const cardEl = document.getElementById('card');
 if (cardEl) {
-    // 16 dígitos → 3 espacios → longitud total 19
+
     cardEl.setAttribute('maxlength', '19');
 
     const formatCard = (digits) => digits.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
@@ -1071,16 +1057,14 @@ if (cardEl) {
         const prev = el.value;
         const caretPrev = el.selectionStart ?? prev.length;
 
-        // dígitos a la izquierda del caret (para reubicarlo luego)
+
         const digitsLeft = prev.slice(0, caretPrev).replace(/\D/g, '').length;
 
-        // solo dígitos, cap a 16
         const digits = prev.replace(/\D/g, '').slice(0, 16);
         const next = formatCard(digits);
 
         el.value = next;
 
-        // reubicar caret manteniendo “cantidad de dígitos previos”
         let caret = 0, count = 0;
         while (count < digitsLeft && caret < next.length) {
             if (/\d/.test(next[caret])) count++;
@@ -1091,4 +1075,64 @@ if (cardEl) {
 
     cardEl.addEventListener('input', handleCardInput);
     cardEl.addEventListener('blur', handleCardInput);
+}
+
+const zipEl = document.getElementById('zip');
+if (zipEl) {
+    zipEl.setAttribute('inputmode', 'numeric');
+    zipEl.setAttribute('maxlength', '4');
+    const handleZip = (e) => {
+        const el = e.target;
+        el.value = (el.value || '').replace(/\D/g, '').slice(0, 4);
+    };
+    zipEl.addEventListener('input', handleZip);
+    zipEl.addEventListener('blur', handleZip);
+}
+
+const expEl = document.getElementById('exp');
+if (expEl) {
+    expEl.setAttribute('inputmode', 'numeric');
+    expEl.setAttribute('maxlength', '5');
+
+    const handleExp = (e) => {
+        let v = (e.target.value || '').replace(/\D/g, '').slice(0, 4);
+        // si hay 3 o 4 dígitos, inserta /
+        if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
+        e.target.value = v; // resultado final: "MM" o "MM/YY"
+    };
+
+    expEl.addEventListener('input', handleExp);
+    expEl.addEventListener('blur', handleExp);
+}
+
+const phoneEl = document.getElementById('phone');
+if (phoneEl) {
+    const handlePhone = (e) => {
+        e.target.value = (e.target.value || '').replace(/\D/g, '').slice(0, 15);
+    };
+    phoneEl.addEventListener('input', handlePhone);
+    phoneEl.addEventListener('blur', handlePhone);
+}
+
+const nameEl = document.getElementById('name');
+if (nameEl) {
+    const handleName = (e) => {
+        let v = (e.target.value || '')
+            .replace(/[^A-Za-zÀ-ÿ\u00f1\u00d1\s]/g, '') // letras, ñ, acentos y espacio
+            .replace(/\s+/g, ' ')
+            .trimStart();
+        e.target.value = v.slice(0, 40);
+    };
+    nameEl.addEventListener('input', handleName);
+    nameEl.addEventListener('blur', handleName);
+}
+
+// --- CVV: solo dígitos, máx 4 (permite 3 o 4) ---
+const cvvEl = document.getElementById('cvv');
+if (cvvEl) {
+    const handleCvv = (e) => {
+        e.target.value = (e.target.value || '').replace(/\D/g, '').slice(0, 4);
+    };
+    cvvEl.addEventListener('input', handleCvv);
+    cvvEl.addEventListener('blur', handleCvv);
 }
